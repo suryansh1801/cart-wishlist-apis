@@ -28,3 +28,7 @@ func (s *WishlistService) AddToWishlist(userID, productID uint) error {
 func (s *WishlistService) RemoveFromWishlist(userID, productID uint) error {
 	return s.repo.DeleteItem(userID, productID)
 }
+
+func (s *WishlistService) MoveItemToCart(userID, productID uint) error {
+	return s.repo.MoveToCart(userID, productID)
+}

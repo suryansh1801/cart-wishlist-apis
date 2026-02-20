@@ -46,3 +46,14 @@ func (h *CartHandler) AddItem(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, gin.H{"message": "Item added to cart"})
 }
+
+func (h *CartHandler) RemoveItem(c *gin.Context) {
+	userID, _ := strconv.ParseUint(c.Param("userID"), 10, 32)
+	productID, _ := strconv.ParseUint(c.Param("productID"), 10, 32)
+
+	if err := h.service.RemoveFromCart(uint(userID), uint(productID)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to remove item"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Item removed from cart"})
+}

@@ -43,3 +43,25 @@ func (h *WishlistHandler) AddItem(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, gin.H{"message": "Item added to wishlist"})
 }
+
+func (h *WishlistHandler) RemoveItem(c *gin.Context) {
+	userID, _ := strconv.ParseUint(c.Param("userID"), 10, 32)
+	productID, _ := strconv.ParseUint(c.Param("productID"), 10, 32)
+
+	if err := h.service.RemoveFromWishlist(uint(userID), uint(productID)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to remove item"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Item removed from wishlist"})
+}
+
+func (h *WishlistHandler) MoveToCart(c *gin.Context) {
+	userID, _ := strconv.ParseUint(c.Param("userID"), 10, 32)
+	productID, _ := strconv.ParseUint(c.Param("productID"), 10, 32)
+
+	if err := h.service.MoveItemToCart(uint(userID), uint(productID)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to move item to cart"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Item successfully moved to cart"})
+}
